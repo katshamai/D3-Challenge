@@ -28,7 +28,7 @@ d3.csv("../assets/data/data.csv").then(function(demoData) {
 demoData.forEach(function(row) {
   row.age = +row.age;
   row.smokes = +row.smokes;
-  row.state = +row.abbr;
+  row.state = row.abbr;
 })
 
     // Step 2: Create scale functions
@@ -70,16 +70,17 @@ demoData.forEach(function(row) {
 
     // Step 6: Insert State Abbr into circles
     // ==============================
-    textGroup = scatterGroup.selectAll("circle")
+    scatterGroup.select("g")
+    .selectAll("circle")
     .data(demoData)
     .enter()
     .append("text")
     .text(d => d.state)
-    .attr("cx", d => xLinearScale(d.age))
-    .attr("cy", d => yLinearScale(d.smokes))
-    .attr("text-anchor", "middle")
+    .attr("x", d => xLinearScale(d.age))
+    .attr("y", d => yLinearScale(d.smokes))
     .attr("dy",-395)
-    .attr("font-size", "10px")
+    .attr("text-anchor", "middle")
+    .attr("font-size", "8px")
     .attr("fill", "black");
 
     // Create axes labels
