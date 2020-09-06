@@ -56,32 +56,50 @@ demoData.forEach(function(row) {
     scatterGroup.append("g")
     .call(yAxis);
 
+
+    var gdots =  svg.selectAll("g.dot")
+            .data(demoData)
+            .enter()
+            .append('g');
+            
+            gdots.append("circle")
+            .attr("class", "dot")
+            .attr("cx", d => xLinearScale(d.age))
+            .attr("cy", d => yLinearScale(d.smokes))
+            .attr("r", 10)
+            .attr("fill", "#89bdd3")
+            .attr("stroke", "#e3e3e3");
+
+            gdots.append("text").text(d => d.state)
+            .attr("cx", d => xLinearScale(d.age))
+            .attr("cy", d => yLinearScale(d.smokes))
+    
     // Step 5: Create Circles
     // ==============================
-    circleGroup = scatterGroup.selectAll("circle")
-    .data(demoData)
-    .enter()
-    .append("circle")
-    .attr("cx", d => xLinearScale(d.age))
-    .attr("cy", d => yLinearScale(d.smokes))
-    .attr("r", 10)
-    .attr("fill", "#89bdd3")
-    .attr("stroke", "#e3e3e3");
+    // circleGroup = scatterGroup.selectAll("circle")
+    // .data(demoData)
+    // .enter()
+    // .append("circle")
+    // .attr("cx", d => xLinearScale(d.age))
+    // .attr("cy", d => yLinearScale(d.smokes))
+    // .attr("r", 10)
+    // .attr("fill", "#89bdd3")
+    // .attr("stroke", "#e3e3e3");
 
-    // Step 6: Insert State Abbr into circles
-    // ==============================
-    scatterGroup.select("g")
-    .selectAll("circle")
-    .data(demoData)
-    .enter()
-    .append("text")
-    .text(d => d.state)
-    .attr("x", d => xLinearScale(d.age))
-    .attr("y", d => yLinearScale(d.smokes))
-    .attr("dy",-395)
-    .attr("text-anchor", "middle")
-    .attr("font-size", "8px")
-    .attr("fill", "black");
+    // // Step 6: Insert State Abbr into circles
+    // // ==============================
+    // scatterGroup.select("g")
+    // .selectAll("circle")
+    // .data(demoData)
+    // .enter()
+    // .append("text")
+    // .text(d => d.state)
+    // .attr("x", d => xLinearScale(d.age))
+    // .attr("y", d => yLinearScale(d.smokes))
+    // .attr("dy",-395)
+    // .attr("text-anchor", "middle")
+    // .attr("font-size", "8px")
+    // .attr("fill", "black");
 
     // Create axes labels
     scatterGroup.append("text")
