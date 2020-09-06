@@ -12,7 +12,7 @@ var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
 // Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
-var svg = d3.select(".scatter")
+var svg = d3.select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
@@ -28,7 +28,7 @@ d3.csv("../assets/data/data.csv").then(function(demoData) {
 demoData.forEach(function(row) {
   row.age = +row.age;
   row.smokes = +row.smokes;
-  row.state = +row.state;
+  row.state = +row.abbr;
 })
 
     // Step 2: Create scale functions
@@ -65,11 +65,22 @@ demoData.forEach(function(row) {
     .attr("cx", d => xLinearScale(d.age))
     .attr("cy", d => yLinearScale(d.smokes))
     .attr("r", 10)
-    .attr("fill", "stateCircle");
+    .attr("fill", "#89bdd3")
+    .attr("stroke", "#e3e3e3");
 
     // Step 6: Insert State Abbr into circles
     // ==============================
-    
+    textGroup = scatterGroup.selectAll("circle")
+    .data(demoData)
+    .enter()
+    .append("text")
+    .text(d => d.state)
+    .attr("cx", d => xLinearScale(d.age))
+    .attr("cy", d => yLinearScale(d.smokes))
+    .attr("text-anchor", "middle")
+    .attr("dy",-395)
+    .attr("font-size", "10px")
+    .attr("fill", "black");
 
     // Create axes labels
     scatterGroup.append("text")
