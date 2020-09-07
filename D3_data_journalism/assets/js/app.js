@@ -1,3 +1,5 @@
+function makeResponsive() {
+
 var svgWidth = 960;
 var svgHeight = 500;
 
@@ -91,12 +93,38 @@ demoData.forEach(function(row) {
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .attr("class", "axisText")
-      .text("Smokers");
+      .text("Average % - Smokers");
 
     scatterGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
       .attr("class", "axisText")
-      .text("Age");
+      .text("Average Age of Respondent");
   }).catch(function(error) {
     console.log(error);
   });
+
+      // Step 1: Append tooltip div
+      var toolTip = d3.select("body")
+      .append("div")
+      .classed("tooltip", true);
+    // Step 2: Create "mouseover" event listener to display tooltip
+    circlesGroup.on("mouseover", function(d) {
+      toolTip.style("display", "block")
+          .html(
+            `<strong>${dateFormatter(d.date)}<strong><hr>${d.medals}
+        medal(s) won`)
+          .style("left", d3.event.pageX + "px")
+          .style("top", d3.event.pageY + "px");
+    })
+      // Step 3: Create "mouseout" event listener to hide tooltip
+      .on("mouseout", function() {
+        toolTip.style("display", "none");
+      });
+  }).catch(function(error) {
+    console.log(error);
+  });
+}
+// When the browser loads, makeResponsive() is called.
+makeResponsive();
+// When the browser window is resized, makeResponsive() is called.
+d3.select(window).on("resize", makeResponsive);
