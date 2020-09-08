@@ -107,6 +107,7 @@ demoData.forEach(function(row) {
       var toolTip = d3.select("body")
       .append("div")
       .classed("tooltip", true);
+      
     // Step 2: Create "mouseover" event listener to display tooltip
     circlesGroup.on("mouseover", function(d) {
       toolTip.style("display", "block")
