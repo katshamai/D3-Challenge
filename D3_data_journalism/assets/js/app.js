@@ -210,7 +210,7 @@ d3.csv("../assets/data/data.csv").then(function(demoData) {
   var ageLabel = xLabelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 20)
-    .attr("value", "Age") // value to grab for event listener
+    .attr("value", "age") // value to grab for event listener
     .classed("active", true)
     .text("Age (Median)");
 
