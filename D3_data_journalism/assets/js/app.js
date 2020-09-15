@@ -25,19 +25,6 @@ var svg = d3
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// Retrieve data from the CSV file and execute everything below
-d3.csv("../assets/data/data.csv").then(function(demoData) {
-
-  // parse data
-  demoData.forEach(function(data) {
-    data.state = data.state;
-    data.abbr = data.abbr;
-    data.smokes = +data.smokes;
-    data.age = +data.age;
-    data.poverty = +data.poverty;
-    data.healthcare = +data.healthcare
-  });
-
 // Initial Params
 var chosenXAxis = "age";
 var chosenYAxis = "smokes";
@@ -58,7 +45,7 @@ function xScale(demoData, chosenXAxis) {
 function yScale(demoData, chosenYAxis) {
   // Create Scales.
   var yLinearScale = d3.scaleLinear()
-      .domain([d3.min(demoData, d => d[chosenYAxis]) * .8,
+      .domain([d3.min(demoData, d => d[chosenYAxis]) * 0.8,
           d3.max(demoData, d => d[chosenYAxis]) * 1.2
       ])
       .range([height, 0]);
@@ -156,6 +143,18 @@ else {
   return circlesGroup;
 });
 
+// Retrieve data from the CSV file and execute everything below
+d3.csv("../assets/data/data.csv").then(function(demoData) {
+
+  // parse data
+  demoData.forEach(function(data) {
+    data.state = data.state;
+    data.abbr = data.abbr;
+    data.smokes = +data.smokes;
+    data.age = +data.age;
+    data.poverty = +data.poverty;
+    data.healthcare = +data.healthcare
+  });
   // xLinearScale function above csv import
   var xLinearScale = xScale(demoData, chosenXAxis);
 
@@ -328,4 +327,15 @@ else {
 
       // Update circles text with new values.
       circletextGroup = renderText(circletextGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
-    });
+    };
+  });
+});
+};
+};
+
+// When Browser Loads, makeResponsive() is Called
+makeResponsive();
+
+// When Browser Window is Resized, makeResponsive() is Called
+d3.select(window).on("resize", makeResponsive);
+
