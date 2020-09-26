@@ -69,7 +69,7 @@ function renderYAxes(newYScale, yAxis) {
 }
 
 // function used for updating circles group with a transition to new circles
-function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+function renderCircles(circlesGroup, newXScale, chosenXAxis,newYScale, chosenYAxis) {
   circlesGroup.transition()
     .duration(1000)
     .attr("cx", d => newXScale(d[chosenXAxis]))
@@ -78,16 +78,16 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYA
 }
 
 // Function used for updating text in circles group with a transition to new text.
-// function renderText(circletextGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
-//   circletextGroup.transition()
-//     .duration(1000)
-//     .attr("x", d => newXScale(d[chosenXAxis]))
-//     .attr("y", d => newYScale(d[chosenYAxis]));
-//   return circletextGroup;
-// }
+function renderText(circletextGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+  circletextGroup.transition()
+    .duration(1000)
+    .attr("x", d => newXScale(d[chosenXAxis]))
+    .attr("y", d => newYScale(d[chosenYAxis]));
+  return circletextGroup;
+}
 
 // function used for updating circles group with new tooltip
-function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circletextGroup) {
+function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
   // Conditional for X Axis.
   if (chosenXAxis === "age") {
@@ -107,8 +107,8 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circletextGroup) 
 
   // Initialise Tool Tip
   var toolTip = d3.tip()
-    .attr('class', 'd3-tip')
-    .offset([90, -90])
+    .attr("class", "tooltip")
+    .offset([120, -60])
     .html(function (d) {
       return (`${d.state}<br>${xLabel} ${d[chosenXAxis]}<br>${yLabel} ${d[chosenYAxis]}`);
     });
@@ -116,8 +116,8 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circletextGroup) 
   // Create circles tool tip
   circlesGroup.call(toolTip);
 
-  // Create event listener for mouseover trigger
-  circlesGroup.on("mouseover", function (data) {
+  // Create event listener for mouse click trigger
+  circlesGroup.on("click", function (data) {
     toolTip.show(data, this);
   })
 
@@ -126,18 +126,6 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circletextGroup) 
       toolTip.hide(data);
     });
 
-  // Create Text Tooltip in the Chart
-  circletextGroup.call(toolTip);
-
-  // Create Event Listeners to Display and Hide the Text Tooltip
-  circletextGroup.on("mouseover", function (data) {
-    toolTip.show(data, this);
-  })
-
-    // onmouseout Event
-    .on("mouseout", function (data) {
-      toolTip.hide(data);
-    });
   return circlesGroup;
 }
 
@@ -145,7 +133,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circletextGroup) 
 d3.csv("assets/data/data.csv").then(function (demoData) {
 
   // parse data
-  demoData.forEach(function (data) {
+  demoData.forEach(function(data) {
     data.state = data.state;
     data.abbr = data.abbr;
     data.smokes = +data.smokes;
@@ -174,29 +162,25 @@ d3.csv("assets/data/data.csv").then(function (demoData) {
     .call(leftAxis);
 
   // append initial circles
-  var circlesGroup = chartGroup.selectAll("circle")
+  var circlesGroup = chartGroup.selectAll()
     .data(demoData)
     .enter()
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d[chosenYAxis]))
-    .attr("class", "stateCircle")
-    .attr("r", 20)
-    .attr("fill", "pink")
-    .attr("opacity", ".5");
+    .attr("r", "20")
+		.attr("class", "stateCircle");
 
   // Add State abbr. text to circles.
-  var circletextGroup = chartGroup.selectAll(".stateText")
+  var circletextGroup = chartGroup.selectAll()
     .data(demoData)
     .enter()
     .append("text")
     .text(d => (d.abbr))
     .attr("x", d => xLinearScale(d[chosenXAxis]))
     .attr("y", d => yLinearScale(d[chosenYAxis]))
-    .attr("class", "stateText")
-    .style("font-size", "12px")
-    .style("text-anchor", "middle")
-    .style("fill", "black");
+		.attr("dy", "3")
+		.attr("class", "stateText");
 
   // Create group for two x-axis labels
   var labelsGroup = chartGroup.append("g")
@@ -233,7 +217,7 @@ d3.csv("assets/data/data.csv").then(function (demoData) {
     .text("Smokes (%)");
 
   // updateToolTip function above csv import
-  var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circletextGroup);
+  var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
   // x axis labels event listener
   labelsGroup.selectAll("text")
@@ -304,10 +288,10 @@ d3.csv("assets/data/data.csv").then(function (demoData) {
               circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
               // Update Text with new values
-              //circletextGroup = renderText(circletextGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+              circletextGroup = renderText(circletextGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
               // Update tool tips
-              circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circletextGroup);
+              circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
             }
           };
         });
