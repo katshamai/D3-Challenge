@@ -78,13 +78,13 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYA
 }
 
 // Function used for updating text in circles group with a transition to new text.
-function renderText(circletextGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
-  circletextGroup.transition()
-    .duration(1000)
-    .attr("x", d => newXScale(d[chosenXAxis]))
-    .attr("y", d => newYScale(d[chosenYAxis]));
-  return circletextGroup;
-}
+// function renderText(circletextGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
+//   circletextGroup.transition()
+//     .duration(1000)
+//     .attr("x", d => newXScale(d[chosenXAxis]))
+//     .attr("y", d => newYScale(d[chosenYAxis]));
+//   return circletextGroup;
+// }
 
 // function used for updating circles group with new tooltip
 function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circletextGroup) {
@@ -304,7 +304,7 @@ d3.csv("assets/data/data.csv").then(function (demoData) {
               circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
               // Update Text with new values
-              circletextGroup = renderText(circletextGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+              //circletextGroup = renderText(circletextGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
               // Update tool tips
               circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circletextGroup);
